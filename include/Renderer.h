@@ -31,7 +31,7 @@ public:
 	void drawThickLine(int x1, int y1, int x2, int y2, Uint8 width);
 	void drawPoint(int x, int y);
 	void drawRect(const SDL_Rect& r);
-	void drawRoundedRect(const SDL_Rect& r, int rad);
+	void drawRoundedRect(const SDL_Rect& r, int radius);
 	void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
 	void drawAATriangle(int x1, int y1, int x2, int y2, int x3, int y3);
 	void drawPolygon(const Sint16* vx, const Sint16* vy, int n);
@@ -40,22 +40,22 @@ public:
 	void drawAAPolygon(const Sint16* vx, const Sint16* vy, int n);
 	void drawAAPolygon(const SDL_Point* v, int n);
 	void drawAAPolygon(const std::vector<SDL_Point>& vec);
-	void drawCircle(int x, int y, int rad);
-	void drawAACircle(int x, int y, int rad);
-	void drawArc(int x, int y, int rad, int start, int end);
-	void drawPie(int x, int y, int rad, int start, int end);
+	void drawCircle(int x, int y, int radius);
+	void drawAACircle(int x, int y, int radius);
+	void drawArc(int x, int y, int radius, int start, int end);
+	void drawPie(int x, int y, int radius, int start, int end);
 	void drawEllipse(int x, int y, int rx, int ry);
 	void drawAAEllipse(int x, int y, int rx, int ry);
 
 	void fillRect(const SDL_Rect& r);
-	void fillRoundedRect(const SDL_Rect& r, int rad);
+	void fillRoundedRect(const SDL_Rect& r, int radius);
 	void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
 	void fillPolygon(const Sint16* vx, const Sint16* vy, int n);
 	void fillPolygon(const SDL_Point* v, int n);
 	void fillPolygon(const std::vector<SDL_Point>& vec);
-	void fillCircle(int x, int y, int rad);
+	void fillCircle(int x, int y, int radius);
 	void fillEllipse(int x, int y, int rx, int ry);
-	void fillPie(int x, int y, int rad, int start, int end);
+	void fillPie(int x, int y, int radius, int start, int end);
 	
 	void fillPolygonSurface(const Sint16* vx, const Sint16* vy, int n, const Surface& s, int dx, int dy);
 	void fillPolygonSurface(const SDL_Point* v, int n, const Surface& s, int dx, int dy);
@@ -65,7 +65,7 @@ public:
 	SDL_Color getColor() const;
 	void setColor(const SDL_Color& c);
 	SDL_Color pushColor(const SDL_Color& c);
-	SDL_Color popColor();
+	SDL_Color popColor(int n = 1);
 
 	SDL_BlendMode getBlendMode() const;
 	void setBlendMode(const SDL_BlendMode& blend);

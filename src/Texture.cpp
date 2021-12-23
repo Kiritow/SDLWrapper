@@ -1,5 +1,10 @@
 #include "Texture.h"
 
+Texture::operator bool()
+{
+	return sp.get();
+}
+
 std::pair<int, int> Texture::getSize() const
 {
 	int w, h;

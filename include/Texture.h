@@ -5,6 +5,8 @@ class Texture
 {
 public:
 	std::shared_ptr<SDL_Texture> sp;
+	operator bool();
+
 	std::pair<int, int> getSize() const;
 
 	Texture() = default;
