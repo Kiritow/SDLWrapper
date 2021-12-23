@@ -1,5 +1,8 @@
 #include "Util.h"
 #include <memory>
+
+#ifdef _WIN32
+
 #include <Windows.h>
 
 std::string GBKToUTF8(const std::string& str)
@@ -15,3 +18,5 @@ std::string GBKToUTF8(const std::string& str)
 
 	return std::string(result.get(), dwResultSize);
 }
+
+#endif
