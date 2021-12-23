@@ -136,7 +136,7 @@ void MusicPlayer::hookChannelFinished(ChannelFinishedCallback callback)
 	Mix_ChannelFinished(callback);
 }
 
-static void MP_MusicFinishCallgate()
+void MP_MusicFinishCallgate()
 {
 	std::unique_lock<std::mutex> ulk(MusicPlayer::_lock);
 	MusicPlayer::_events.emplace(1, 0);
