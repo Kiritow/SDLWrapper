@@ -61,14 +61,12 @@ void Renderer::drawLine(int x1, int y1, int x2, int y2)
 
 void Renderer::drawAALine(int x1, int y1, int x2, int y2)
 {
-	SDL_Color c = getColor();
-	aalineRGBA(_sp.get(), x1, y1, x2, y2, c.r, c.g, c.b, c.a);
+	aalineRGBA(_sp.get(), x1, y1, x2, y2, 0, 0, 0, 0);
 }
 
 void Renderer::drawThickLine(int x1, int y1, int x2, int y2, Uint8 width)
 {
-	SDL_Color c = getColor();
-	thickLineRGBA(_sp.get(), x1, y1, x2, y2, width, c.r, c.g, c.b, c.a);
+	thickLineRGBA(_sp.get(), x1, y1, x2, y2, width, 0, 0, 0, 0);
 }
 
 void Renderer::drawPoint(int x, int y)
@@ -83,26 +81,22 @@ void Renderer::drawRect(const SDL_Rect& r)
 
 void Renderer::drawRoundedRect(const SDL_Rect& r, int radius)
 {
-	SDL_Color c = getColor();
-	roundedRectangleRGBA(_sp.get(), r.x, r.y, r.x + r.w, r.y + r.h, radius, c.r, c.g, c.b, c.a);
+	roundedRectangleRGBA(_sp.get(), r.x, r.y, r.x + r.w, r.y + r.h, radius, 0, 0, 0, 0);
 }
 
 void Renderer::drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 {
-	SDL_Color c = getColor();
-	trigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, c.r, c.g, c.b, c.a);
+	trigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, 0, 0, 0, 0);
 }
 
 void Renderer::drawAATriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 {
-	SDL_Color c = getColor();
-	aatrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, c.r, c.g, c.b, c.a);
+	aatrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, 0, 0, 0, 0);
 }
 
 void Renderer::drawPolygon(const Sint16* vx, const Sint16* vy, int n)
 {
-	SDL_Color c = getColor();
-	polygonRGBA(_sp.get(), vx, vy, n, c.r, c.g, c.b, c.a);
+	polygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
 }
 
 void Renderer::drawPolygon(const SDL_Point* v, int n)
@@ -124,8 +118,7 @@ void Renderer::drawPolygon(const std::vector<SDL_Point>& vec)
 
 void Renderer::drawAAPolygon(const Sint16* vx, const Sint16* vy, int n)
 {
-	SDL_Color c = getColor();
-	aapolygonRGBA(_sp.get(), vx, vy, n, c.r, c.g, c.b, c.a);
+	aapolygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
 }
 
 void Renderer::drawAAPolygon(const SDL_Point* v, int n)
@@ -147,38 +140,32 @@ void Renderer::drawAAPolygon(const std::vector<SDL_Point>& vec)
 
 void Renderer::drawCircle(int x, int y, int radius)
 {
-	SDL_Color c = getColor();
-	circleRGBA(_sp.get(), x, y, radius, c.r, c.g, c.b, c.a);
+	circleRGBA(_sp.get(), x, y, radius, 0, 0, 0, 0);
 }
 
 void Renderer::drawAACircle(int x, int y, int radius)
 {
-	SDL_Color c = getColor();
-	aacircleRGBA(_sp.get(), x, y, radius, c.r, c.g, c.b, c.a);
+	aacircleRGBA(_sp.get(), x, y, radius, 0, 0, 0, 0);
 }
 
 void Renderer::drawArc(int x, int y, int radius, int start, int end)
 {
-	SDL_Color c = getColor();
-	arcRGBA(_sp.get(), x, y, radius, start, end, c.r, c.g, c.b, c.a);
+	arcRGBA(_sp.get(), x, y, radius, start, end, 0, 0, 0, 0);
 }
 
 void Renderer::drawPie(int x, int y, int radius, int start, int end)
 {
-	SDL_Color c = getColor();
-	pieRGBA(_sp.get(), x, y, radius, start, end, c.r, c.g, c.b, c.a);
+	pieRGBA(_sp.get(), x, y, radius, start, end, 0, 0, 0, 0);
 }
 
 void Renderer::drawEllipse(int x, int y, int rx, int ry)
 {
-	SDL_Color c = getColor();
-	ellipseRGBA(_sp.get(), x, y, rx, ry, c.r, c.g, c.b, c.a);
+	ellipseRGBA(_sp.get(), x, y, rx, ry, 0, 0, 0, 0);
 }
 
 void Renderer::drawAAEllipse(int x, int y, int rx, int ry)
 {
-	SDL_Color c = getColor();
-	aaellipseRGBA(_sp.get(), x, y, rx, ry, c.r, c.g, c.b, c.a);
+	aaellipseRGBA(_sp.get(), x, y, rx, ry, 0, 0, 0, 0);
 }
 
 void Renderer::fillRect(const SDL_Rect& r)
@@ -188,20 +175,17 @@ void Renderer::fillRect(const SDL_Rect& r)
 
 void Renderer::fillRoundedRect(const SDL_Rect& r, int radius)
 {
-	SDL_Color c = getColor();
-	roundedBoxRGBA(_sp.get(), r.x, r.y, r.x + r.w, r.y + r.h, radius, c.r, c.g, c.b, c.a);
+	roundedBoxRGBA(_sp.get(), r.x, r.y, r.x + r.w, r.y + r.h, radius, 0, 0, 0, 0);
 }
 
 void Renderer::fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 {
-	SDL_Color c = getColor();
-	filledTrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, c.r, c.g, c.b, c.a);
+	filledTrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, 0, 0, 0, 0);
 }
 
 void Renderer::fillPolygon(const Sint16* vx, const Sint16* vy, int n)
 {
-	SDL_Color c = getColor();
-	filledPolygonRGBA(_sp.get(), vx, vy, n, c.r, c.g, c.b, c.a);
+	filledPolygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
 }
 
 void Renderer::fillPolygon(const SDL_Point* v, int n)
@@ -223,25 +207,21 @@ void Renderer::fillPolygon(const std::vector<SDL_Point>& vec)
 
 void Renderer::fillCircle(int x, int y, int radius)
 {
-	SDL_Color c = getColor();
-	filledCircleRGBA(_sp.get(), x, y, radius, c.r, c.g, c.b, c.a);
+	filledCircleRGBA(_sp.get(), x, y, radius, 0, 0, 0, 0);
 }
 
 void Renderer::fillEllipse(int x, int y, int rx, int ry)
 {
-	SDL_Color c = getColor();
-	filledEllipseRGBA(_sp.get(), x, y, rx, ry, c.r, c.g, c.b, c.a);
+	filledEllipseRGBA(_sp.get(), x, y, rx, ry, 0, 0, 0, 0);
 }
 
 void Renderer::fillPie(int x, int y, int radius, int start, int end)
 {
-	SDL_Color c = getColor();
-	filledPieRGBA(_sp.get(), x, y, radius, start, end, c.r, c.g, c.b, c.a);
+	filledPieRGBA(_sp.get(), x, y, radius, start, end, 0, 0, 0, 0);
 }
 
 void Renderer::fillPolygonSurface(const Sint16* vx, const Sint16* vy, int n, const Surface& s, int dx, int dy)
 {
-	SDL_Color c = getColor();
 	texturedPolygon(_sp.get(), vx, vy, n, s.sp.get(), dx, dy);
 }
 
