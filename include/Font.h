@@ -7,7 +7,7 @@ class Font
 {
 public:
 	std::shared_ptr<TTF_Font> _sp;
-	operator bool();
+	operator bool() const;
 
 	Font() = default;
 	Font(const std::string& filename, int ptsize);

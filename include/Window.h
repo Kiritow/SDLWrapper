@@ -12,7 +12,7 @@ public:
 		const SDL_WindowFlags& flags = SDL_WINDOW_HIDDEN,
 		int x = SDL_WINDOWPOS_CENTERED, int y = SDL_WINDOWPOS_CENTERED);
 	
-	Renderer createRenderer(const SDL_RendererFlags& flags = SDL_RENDERER_ACCELERATED, int index = -1);
+	Renderer createRenderer(Uint32 flags = SDL_RENDERER_ACCELERATED, int index = -1);
 
 	Uint32 getID() const;
 

@@ -16,6 +16,7 @@ public:
 	Texture load(const std::string& filename);
 	Texture load(const void* data, int size);
 	Texture render(const Surface& surf);
+	Texture create(int w, int h, Uint32 format = SDL_PIXELFORMAT_RGBA32, int access = SDL_TEXTUREACCESS_TARGET);
 
 	void clear();
 	void present();
@@ -71,8 +72,9 @@ public:
 	void setBlendMode(const SDL_BlendMode& blend);
 
 	void setTarget(Texture& t);
-	void setTarget();
-
+	void clearTarget();
+	SDL_Rect getViewport() const;
+	void setViewport(const SDL_Rect&);
 private: 
 	friend class Window;
 	Renderer(SDL_Renderer* rnd);

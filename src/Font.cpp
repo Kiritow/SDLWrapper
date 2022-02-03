@@ -1,7 +1,7 @@
 #include "Font.h"
 #include "Util.h"
 
-Font::operator bool()
+Font::operator bool() const
 {
 	return _sp.get();
 }

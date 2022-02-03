@@ -4,17 +4,17 @@
 class Texture
 {
 public:
-	std::shared_ptr<SDL_Texture> sp;
-	operator bool();
+	std::shared_ptr<SDL_Texture> _sp;
+	operator bool() const;
 
 	std::pair<int, int> getSize() const;
 
 	Texture() = default;
 
-	SDL_Color getColor() const;
-	void setColor(const SDL_Color& c);
-	int getAlpha() const;
-	void setAlpha(const int& alpha);
+	SDL_Color getColorMod() const;
+	void setColorMod(const SDL_Color& c);
+	int getAlphaMod() const;
+	void setAlphaMod(const int& alpha);
 	SDL_BlendMode getBlendMode() const;
 	void setBlendMode(const SDL_BlendMode& blend);
 private:

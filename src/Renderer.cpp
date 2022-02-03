@@ -17,6 +17,11 @@ Texture Renderer::render(const Surface& surf)
 	return Texture(SDL_CreateTextureFromSurface(_sp.get(), surf.sp.get()));
 }
 
+Texture Renderer::create(int w, int h, Uint32 format, int access)
+{
+	return Texture(SDL_CreateTexture(_sp.get(), format, access, w, h));
+}
+
 void Renderer::clear()
 {
 	SDL_RenderClear(_sp.get());
@@ -29,29 +34,29 @@ void Renderer::present()
 
 void Renderer::copy(const Texture& t, const SDL_Rect& src, const SDL_Rect& dst)
 {
-	SDL_RenderCopy(_sp.get(), t.sp.get(), &src, &dst);
+	SDL_RenderCopy(_sp.get(), t._sp.get(), &src, &dst);
 }
 
 void Renderer::copyTo(const Texture& t, const SDL_Point& lu)
 {
 	SDL_Rect dst{ lu.x, lu.y, 0, 0 };
 	std::tie(dst.w, dst.h) = t.getSize();
-	SDL_RenderCopy(_sp.get(), t.sp.get(), NULL, &dst);
+	SDL_RenderCopy(_sp.get(), t._sp.get(), NULL, &dst);
 }
 
 void Renderer::copyTo(const Texture& t, const SDL_Rect& dst)
 {
-	SDL_RenderCopy(_sp.get(), t.sp.get(), NULL, &dst);
+	SDL_RenderCopy(_sp.get(), t._sp.get(), NULL, &dst);
 }
 
 void Renderer::copyFill(const Texture& t, const SDL_Rect& src)
 {
-	SDL_RenderCopy(_sp.get(), t.sp.get(), &src, NULL);
+	SDL_RenderCopy(_sp.get(), t._sp.get(), &src, NULL);
 }
 
 void Renderer::copyFullFill(const Texture& t)
 {
-	SDL_RenderCopy(_sp.get(), t.sp.get(), NULL, NULL);
+	SDL_RenderCopy(_sp.get(), t._sp.get(), NULL, NULL);
 }
 
 void Renderer::drawLine(int x1, int y1, int x2, int y2)
@@ -292,12 +297,24 @@ void Renderer::setBlendMode(const SDL_BlendMode& blend)
 
 void Renderer::setTarget(Texture& t)
 {
-	SDL_SetRenderTarget(_sp.get(), t.sp.get());
+	SDL_SetRenderTarget(_sp.get(), t._sp.get());
 }
 
-void Renderer::setTarget()
+void Renderer::clearTarget()
 {
 	SDL_SetRenderTarget(_sp.get(), NULL);
+}
+
+void Renderer::setViewport(const SDL_Rect& r)
+{
+	SDL_RenderSetViewport(_sp.get(), &r);
+}
+
+SDL_Rect Renderer::getViewport() const
+{
+	SDL_Rect r;
+	SDL_RenderGetViewport(_sp.get(), &r);
+	return r;
 }
 
 Renderer::Renderer(SDL_Renderer* rnd) : _sp(rnd, SDL_DestroyRenderer)

@@ -5,7 +5,7 @@ Window::Window(const std::string& title, int w, int h, const SDL_WindowFlags& fl
 	if (!_sp.get()) throw SDLErrorViewer();
 }
 
-Renderer Window::createRenderer(const SDL_RendererFlags& flags, int index)
+Renderer Window::createRenderer(Uint32 flags, int index)
 {
 	return Renderer(SDL_CreateRenderer(_sp.get(), index, flags));
 }
