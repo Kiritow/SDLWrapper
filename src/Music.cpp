@@ -1,28 +1,28 @@
 #include "Music.h"
 
-Music::Music(const std::string& filename) : sp(Mix_LoadMUS(filename.c_str()), Mix_FreeMusic)
+Music::Music(const std::string& filename) : _sp(Mix_LoadMUS(filename.c_str()), Mix_FreeMusic)
 {
 
 }
 
-Music::Music(const void* data, int size) : sp(Mix_LoadMUS_RW(SDL_RWFromConstMem(data, size), 1), Mix_FreeMusic)
+Music::Music(const void* data, int size) : _sp(Mix_LoadMUS_RW(SDL_RWFromConstMem(data, size), 1), Mix_FreeMusic)
 {
 
 }
 
-Sound::Sound(const std::string& filename) : sp(Mix_LoadWAV(filename.c_str()), Mix_FreeChunk)
+Sound::Sound(const std::string& filename) : _sp(Mix_LoadWAV(filename.c_str()), Mix_FreeChunk)
 {
 
 }
 
-Sound::Sound(const void* data, int size) : sp(Mix_LoadWAV_RW(SDL_RWFromConstMem(data, size), 1), Mix_FreeChunk)
+Sound::Sound(const void* data, int size) : _sp(Mix_LoadWAV_RW(SDL_RWFromConstMem(data, size), 1), Mix_FreeChunk)
 {
 
 }
 
 void Sound::setVolume(int volume)
 {
-	Mix_VolumeChunk(sp.get(), volume);
+	Mix_VolumeChunk(_sp.get(), volume);
 }
 
 std::thread MusicPlayer::_tdChecker;
@@ -34,7 +34,7 @@ std::queue<std::pair<int, int>> MusicPlayer::_events;
 
 void MusicPlayer::play(const Music& m, int loop)
 {
-	if (Mix_PlayMusic(m.sp.get(), loop) < 0)
+	if (Mix_PlayMusic(m._sp.get(), loop) < 0)
 	{
 		throw SDLErrorViewer();
 	}
@@ -42,22 +42,22 @@ void MusicPlayer::play(const Music& m, int loop)
 
 void MusicPlayer::play(const Sound& s, int chan, int loop)
 {
-	Mix_PlayChannel(chan, s.sp.get(), loop);
+	Mix_PlayChannel(chan, s._sp.get(), loop);
 }
 
 void MusicPlayer::fadeIn(const Music& m, int ms, int loop)
 {
-	Mix_FadeInMusic(m.sp.get(), loop, ms);
+	Mix_FadeInMusic(m._sp.get(), loop, ms);
 }
 
 void MusicPlayer::fadeIn(const Sound& s, int chan, int ms, int loop)
 {
-	Mix_FadeInChannel(chan, s.sp.get(), loop, chan);
+	Mix_FadeInChannel(chan, s._sp.get(), loop, chan);
 }
 
 void MusicPlayer::fadeInPos(const Music& m, int ms, double position, int loop)
 {
-	Mix_FadeInMusicPos(m.sp.get(), loop, ms, position);
+	Mix_FadeInMusicPos(m._sp.get(), loop, ms, position);
 }
 
 void MusicPlayer::stop()

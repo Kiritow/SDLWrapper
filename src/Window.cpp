@@ -1,6 +1,6 @@
 #include "Window.h"
 
-Window::Window(const std::string& title, int w, int h, const SDL_WindowFlags& flags, int x, int y) : _sp(SDL_CreateWindow(title.c_str(), x, y, w, h, flags), SDL_DestroyWindow)
+Window::Window(const std::string& title, int w, int h, Uint32 flags, int x, int y) : _sp(SDL_CreateWindow(title.c_str(), x, y, w, h, flags), SDL_DestroyWindow)
 {
 	if (!_sp.get()) throw SDLErrorViewer();
 }
