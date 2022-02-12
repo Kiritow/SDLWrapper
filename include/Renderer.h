@@ -27,6 +27,18 @@ public:
 	void copyFill(const Texture& t, const SDL_Rect& src);
 	void copyFullFill(const Texture& t);
 
+	void copy(const Texture& t, const SDL_Rect& src, const SDL_Rect& dst, double angle, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyTo(const Texture& t, const SDL_Rect& dst, double angle, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyTo(const Texture& t, const SDL_Point& lu, double angle, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyFill(const Texture& t, const SDL_Rect& src, double angle, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyFullFill(const Texture& t, double angle, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+
+	void copy(const Texture& t, const SDL_Rect& src, const SDL_Rect& dst, double angle, const SDL_Point& center, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyTo(const Texture& t, const SDL_Rect& dst, double angle, const SDL_Point& center, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyTo(const Texture& t, const SDL_Point& lu, double angle, const SDL_Point& center, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyFill(const Texture& t, const SDL_Rect& src, double angle, const SDL_Point& center, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+	void copyFullFill(const Texture& t, double angle, const SDL_Point& center, SDL_RendererFlip mode = SDL_RendererFlip::SDL_FLIP_NONE);
+
 	void drawLine(int x1, int y1, int x2, int y2);
 	void drawAALine(int x1, int y1, int x2, int y2);
 	void drawThickLine(int x1, int y1, int x2, int y2, Uint8 width);
@@ -75,6 +87,7 @@ public:
 	void clearTarget();
 	SDL_Rect getViewport() const;
 	void setViewport(const SDL_Rect&);
+
 private: 
 	friend class Window;
 	Renderer(SDL_Renderer* rnd);

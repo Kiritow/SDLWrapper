@@ -59,6 +59,60 @@ void Renderer::copyFullFill(const Texture& t)
 	SDL_RenderCopy(_sp.get(), t._sp.get(), NULL, NULL);
 }
 
+void Renderer::copy(const Texture& t, const SDL_Rect& src, const SDL_Rect& dst, double angle, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), &src, &dst, angle, NULL, mode);
+}
+
+void Renderer::copyTo(const Texture& t, const SDL_Rect& dst, double angle, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, &dst, angle, NULL, mode);
+}
+
+void Renderer::copyTo(const Texture& t, const SDL_Point& lu, double angle, SDL_RendererFlip mode)
+{
+	SDL_Rect dst{ lu.x, lu.y, 0, 0 };
+	std::tie(dst.w, dst.h) = t.getSize();
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, &dst, angle, NULL, mode);
+}
+
+void Renderer::copyFill(const Texture& t, const SDL_Rect& src, double angle, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), &src, NULL, angle, NULL, mode);
+}
+
+void Renderer::copyFullFill(const Texture& t, double angle, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, NULL, angle, NULL, mode);
+}
+
+void Renderer::copy(const Texture& t, const SDL_Rect& src, const SDL_Rect& dst, double angle, const SDL_Point& center, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), &src, &dst, angle, &center, mode);
+}
+
+void Renderer::copyTo(const Texture& t, const SDL_Rect& dst, double angle, const SDL_Point& center, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, &dst, angle, &center, mode);
+}
+
+void Renderer::copyTo(const Texture& t, const SDL_Point& lu, double angle, const SDL_Point& center, SDL_RendererFlip mode)
+{
+	SDL_Rect dst{ lu.x, lu.y, 0, 0 };
+	std::tie(dst.w, dst.h) = t.getSize();
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, &dst, angle, &center, mode);
+}
+
+void Renderer::copyFill(const Texture& t, const SDL_Rect& src, double angle, const SDL_Point& center, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), &src, NULL, angle, &center, mode);
+}
+
+void Renderer::copyFullFill(const Texture& t, double angle, const SDL_Point& center, SDL_RendererFlip mode)
+{
+	SDL_RenderCopyEx(_sp.get(), t._sp.get(), NULL, NULL, angle, &center, mode);
+}
+
 void Renderer::drawLine(int x1, int y1, int x2, int y2)
 {
 	SDL_RenderDrawLine(_sp.get(), x1, y1, x2, y2);
