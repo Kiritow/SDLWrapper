@@ -42,6 +42,10 @@ public:
 	static void pause();
 	static void pause(int chan);
 	static void setMusicPosition(double position);
+	static void setPosition(int channel, double angle, int position);
+
+	// Query
+	static bool isPlaying(int chan);
 
 	// General
 	static std::tuple<int, Uint16, int> querySpec();

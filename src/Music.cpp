@@ -95,6 +95,16 @@ void MusicPlayer::setMusicPosition(double position)
 	Mix_SetMusicPosition(position);
 }
 
+void MusicPlayer::setPosition(int channel, double angle, int position)
+{
+	Mix_SetPosition(channel, angle, position);
+}
+
+bool MusicPlayer::isPlaying(int chan)
+{
+	return Mix_Playing(chan);
+}
+
 std::tuple<int, Uint16, int> MusicPlayer::querySpec()
 {
 	int freq;

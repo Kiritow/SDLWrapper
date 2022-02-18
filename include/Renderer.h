@@ -18,6 +18,9 @@ public:
 	Texture render(const Surface& surf);
 	Texture create(int w, int h, Uint32 format = SDL_PIXELFORMAT_RGBA32, int access = SDL_TEXTUREACCESS_TARGET);
 
+	// Clone a texture will change render target, use with caution.
+	Texture clone(const Texture& t);
+
 	void clear();
 	void present();
 

@@ -22,6 +22,21 @@ Texture Renderer::create(int w, int h, Uint32 format, int access)
 	return Texture(SDL_CreateTexture(_sp.get(), format, access, w, h));
 }
 
+Texture Renderer::clone(const Texture& t)
+{
+	Uint32 format;
+	int tw, th;
+
+	SDL_QueryTexture(t._sp.get(), &format, NULL, &tw, &th);
+
+	Texture nt = create(tw, th, format, SDL_TEXTUREACCESS_TARGET);
+	setTarget(nt);
+	copyFullFill(t);
+	clearTarget();
+
+	return nt;
+}
+
 void Renderer::clear()
 {
 	SDL_RenderClear(_sp.get());
