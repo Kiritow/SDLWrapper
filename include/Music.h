@@ -9,7 +9,7 @@
 class Music
 {
 public:
-	std::shared_ptr<Mix_Music> _sp;
+	std::unique_ptr<Mix_Music, decltype(&Mix_FreeMusic)> _sp;
 
 	Music(const std::string& filename);
 	Music(const void* data, int size);
@@ -18,7 +18,7 @@ public:
 class Sound
 {
 public:
-	std::shared_ptr<Mix_Chunk> _sp;
+	std::unique_ptr<Mix_Chunk, decltype(&Mix_FreeChunk)> _sp;
 
 	Sound(const std::string& filename);
 	Sound(const void* data, int size);

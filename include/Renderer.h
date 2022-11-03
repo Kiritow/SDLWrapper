@@ -2,13 +2,14 @@
 #include "includes.h"
 #include "Surface.h"
 #include "Texture.h"
+#include "Point.h"
 #include <vector>
 #include <stack>
 
 class Renderer
 {
 public:
-	std::shared_ptr<SDL_Renderer> _sp;
+	std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> _sp;
 	std::stack<SDL_Color> _storedColors;
 
 	Renderer() = default;
@@ -17,8 +18,6 @@ public:
 	Texture load(const void* data, int size);
 	Texture render(const Surface& surf);
 	Texture create(int w, int h, Uint32 format = SDL_PIXELFORMAT_RGBA32, int access = SDL_TEXTUREACCESS_TARGET);
-
-	// Clone a texture will change render target, use with caution.
 	Texture clone(const Texture& t);
 
 	void clear();
@@ -53,6 +52,7 @@ public:
 	void drawPolygon(const Sint16* vx, const Sint16* vy, int n);
 	void drawPolygon(const SDL_Point* v, int n);
 	void drawPolygon(const std::vector<SDL_Point>& vec);
+	void drawPolygon(const std::vector<Point>& vec);
 	void drawAAPolygon(const Sint16* vx, const Sint16* vy, int n);
 	void drawAAPolygon(const SDL_Point* v, int n);
 	void drawAAPolygon(const std::vector<SDL_Point>& vec);
@@ -69,6 +69,7 @@ public:
 	void fillPolygon(const Sint16* vx, const Sint16* vy, int n);
 	void fillPolygon(const SDL_Point* v, int n);
 	void fillPolygon(const std::vector<SDL_Point>& vec);
+	void fillPolygon(const std::vector<Point>& vec);
 	void fillCircle(int x, int y, int radius);
 	void fillEllipse(int x, int y, int rx, int ry);
 	void fillPie(int x, int y, int radius, int start, int end);
@@ -80,6 +81,7 @@ public:
 
 	SDL_Color getColor() const;
 	void setColor(const SDL_Color& c);
+	SDL_Color pushColor();
 	SDL_Color pushColor(const SDL_Color& c);
 	SDL_Color popColor(int n = 1);
 

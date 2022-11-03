@@ -4,7 +4,7 @@
 class Surface
 {
 public:
-	std::shared_ptr<SDL_Surface> sp;
+	std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> sp;
 
 	Surface(const std::string& filename);
 	Surface(const void* data, int size);

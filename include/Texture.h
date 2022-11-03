@@ -4,13 +4,10 @@
 class Texture
 {
 public:
-	std::shared_ptr<SDL_Texture> _sp;
+	std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> _sp;
 	operator bool() const;
 
 	std::pair<int, int> getSize() const;
-
-	Texture() = default;
-
 	SDL_Color getColorMod() const;
 	void setColorMod(const SDL_Color& c);
 	int getAlphaMod() const;

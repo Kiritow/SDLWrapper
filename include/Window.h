@@ -5,7 +5,7 @@
 class Window
 {
 public:
-	std::shared_ptr<SDL_Window> _sp;
+	std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> _sp;
 
 	Window() = default;
 	Window(const std::string& title, int w, int h,

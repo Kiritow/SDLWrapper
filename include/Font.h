@@ -6,7 +6,7 @@
 class Font
 {
 public:
-	std::shared_ptr<TTF_Font> _sp;
+	std::unique_ptr<TTF_Font, decltype(&TTF_CloseFont)> _sp;
 	operator bool() const;
 
 	Font() = default;

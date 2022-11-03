@@ -1,5 +1,5 @@
 #include "Surface.h"
-#include "SDL2/SDL2_rotozoom.h"
+#include "SDL2_rotozoom.h"
 
 Surface::Surface(const std::string& filename) : sp(IMG_Load(filename.c_str()), SDL_FreeSurface)
 {

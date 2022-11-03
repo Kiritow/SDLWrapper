@@ -4,7 +4,7 @@
 class RWOP
 {
 public:
-	std::shared_ptr<SDL_RWops> sp;
+	std::unique_ptr<SDL_RWops, decltype(&SDL_RWclose)> sp;
 
 	RWOP(const std::string& filename, const std::string& mode = "rb");
 };

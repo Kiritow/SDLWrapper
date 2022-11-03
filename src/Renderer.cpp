@@ -1,6 +1,6 @@
 #include "Renderer.h"
 #include "Color.h"
-#include <SDL2/SDL2_gfxPrimitives.h>
+#include "SDL2_gfxPrimitives.h"
 
 Texture Renderer::load(const std::string& filename)
 {
@@ -26,15 +26,13 @@ Texture Renderer::clone(const Texture& t)
 {
 	Uint32 format;
 	int tw, th;
-
 	SDL_QueryTexture(t._sp.get(), &format, NULL, &tw, &th);
-
-	Texture nt = create(tw, th, format, SDL_TEXTUREACCESS_TARGET);
-	setTarget(nt);
-	copyFullFill(t);
-	clearTarget();
-
-	return nt;
+	SDL_Texture* nt = SDL_CreateTexture(_sp.get(), format, SDL_TEXTUREACCESS_TARGET, tw, th);
+	SDL_Texture* old = SDL_GetRenderTarget(_sp.get());
+	SDL_SetRenderTarget(_sp.get(), nt);
+	SDL_RenderCopy(_sp.get(), nt, NULL, NULL);
+	SDL_SetRenderTarget(_sp.get(), old);
+	return Texture(nt);
 }
 
 void Renderer::clear()
@@ -168,12 +166,8 @@ void Renderer::drawAATriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 	aatrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, 0, 0, 0, 0);
 }
 
-void Renderer::drawPolygon(const Sint16* vx, const Sint16* vy, int n)
-{
-	polygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
-}
-
-void Renderer::drawPolygon(const SDL_Point* v, int n)
+template<typename Fn, typename T>
+void polygonWrap(Renderer& rnd, Fn f, const T& v, int n)
 {
 	std::vector<Sint16> vx(n);
 	std::vector<Sint16> vy(n);
@@ -182,12 +176,27 @@ void Renderer::drawPolygon(const SDL_Point* v, int n)
 		vx[i] = v[i].x;
 		vy[i] = v[i].y;
 	}
-	drawPolygon(vx.data(), vy.data(), n);
+	f(rnd._sp.get(), vx.data(), vy.data(), n, 0, 0, 0, 0);
+}
+
+void Renderer::drawPolygon(const Sint16* vx, const Sint16* vy, int n)
+{
+	polygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
+}
+
+void Renderer::drawPolygon(const SDL_Point* v, int n)
+{
+	polygonWrap(*this, polygonRGBA, v, n);
 }
 
 void Renderer::drawPolygon(const std::vector<SDL_Point>& vec)
 {
-	drawPolygon(vec.data(), vec.size());
+	polygonWrap(*this, polygonRGBA, vec, vec.size());
+}
+
+void Renderer::drawPolygon(const std::vector<Point>& vec)
+{
+	polygonWrap(*this, polygonRGBA, vec, vec.size());
 }
 
 void Renderer::drawAAPolygon(const Sint16* vx, const Sint16* vy, int n)
@@ -197,6 +206,41 @@ void Renderer::drawAAPolygon(const Sint16* vx, const Sint16* vy, int n)
 
 void Renderer::drawAAPolygon(const SDL_Point* v, int n)
 {
+	polygonWrap(*this, aapolygonRGBA, v, n);
+}
+
+void Renderer::drawAAPolygon(const std::vector<SDL_Point>& vec)
+{
+	polygonWrap(*this, aapolygonRGBA, vec, vec.size());
+}
+
+void Renderer::fillPolygon(const Sint16* vx, const Sint16* vy, int n)
+{
+	filledPolygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
+}
+
+void Renderer::fillPolygon(const SDL_Point* v, int n)
+{
+	polygonWrap(*this, filledPolygonRGBA, v, n);
+}
+
+void Renderer::fillPolygon(const std::vector<SDL_Point>& vec)
+{
+	polygonWrap(*this, filledPolygonRGBA, vec, vec.size());
+}
+
+void Renderer::fillPolygon(const std::vector<Point>& vec)
+{
+	polygonWrap(*this, filledPolygonRGBA, vec, vec.size());
+}
+
+void Renderer::fillPolygonSurface(const Sint16* vx, const Sint16* vy, int n, const Surface& s, int dx, int dy)
+{
+	texturedPolygon(_sp.get(), vx, vy, n, s.sp.get(), dx, dy);
+}
+
+void Renderer::fillPolygonSurface(const SDL_Point* v, int n, const Surface& s, int dx, int dy)
+{
 	std::vector<Sint16> vx(n);
 	std::vector<Sint16> vy(n);
 	for (int i = 0; i < n; i++)
@@ -204,12 +248,19 @@ void Renderer::drawAAPolygon(const SDL_Point* v, int n)
 		vx[i] = v[i].x;
 		vy[i] = v[i].y;
 	}
-	drawAAPolygon(vx.data(), vy.data(), n);
+	fillPolygonSurface(vx.data(), vy.data(), n, s, dx, dy);
 }
 
-void Renderer::drawAAPolygon(const std::vector<SDL_Point>& vec)
+void Renderer::fillPolygonSurface(const std::vector<SDL_Point>& vec, const Surface& s, int dx, int dy)
 {
-	drawAAPolygon(vec.data(), vec.size());
+	fillPolygonSurface(vec.data(), vec.size(), s, dx, dy);
+}
+
+void Renderer::fillPolygonSurface(const std::vector<SDL_Point>& vec, const Surface& s, const SDL_Point& lup)
+{
+	int w, h;
+	std::tie(w, h) = s.getSize();
+	fillPolygonSurface(vec, s, w - lup.x, lup.y);
 }
 
 void Renderer::drawCircle(int x, int y, int radius)
@@ -257,28 +308,6 @@ void Renderer::fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3)
 	filledTrigonRGBA(_sp.get(), x1, y1, x2, y2, x3, y3, 0, 0, 0, 0);
 }
 
-void Renderer::fillPolygon(const Sint16* vx, const Sint16* vy, int n)
-{
-	filledPolygonRGBA(_sp.get(), vx, vy, n, 0, 0, 0, 0);
-}
-
-void Renderer::fillPolygon(const SDL_Point* v, int n)
-{
-	std::vector<Sint16> vx(n);
-	std::vector<Sint16> vy(n);
-	for (int i = 0; i < n; i++)
-	{
-		vx[i] = v[i].x;
-		vy[i] = v[i].y;
-	}
-	fillPolygon(vx.data(), vy.data(), n);
-}
-
-void Renderer::fillPolygon(const std::vector<SDL_Point>& vec)
-{
-	fillPolygon(vec.data(), vec.size());
-}
-
 void Renderer::fillCircle(int x, int y, int radius)
 {
 	filledCircleRGBA(_sp.get(), x, y, radius, 0, 0, 0, 0);
@@ -294,35 +323,6 @@ void Renderer::fillPie(int x, int y, int radius, int start, int end)
 	filledPieRGBA(_sp.get(), x, y, radius, start, end, 0, 0, 0, 0);
 }
 
-void Renderer::fillPolygonSurface(const Sint16* vx, const Sint16* vy, int n, const Surface& s, int dx, int dy)
-{
-	texturedPolygon(_sp.get(), vx, vy, n, s.sp.get(), dx, dy);
-}
-
-void Renderer::fillPolygonSurface(const SDL_Point* v, int n, const Surface& s, int dx, int dy)
-{
-	std::vector<Sint16> vx(n);
-	std::vector<Sint16> vy(n);
-	for (int i = 0; i < n; i++)
-	{
-		vx[i] = v[i].x;
-		vy[i] = v[i].y;
-	}
-	fillPolygonSurface(vx.data(), vy.data(), n, s, dx, dy);
-}
-
-void Renderer::fillPolygonSurface(const std::vector<SDL_Point>& vec, const Surface& s, int dx, int dy)
-{
-	fillPolygonSurface(vec.data(), vec.size(), s, dx, dy);
-}
-
-void Renderer::fillPolygonSurface(const std::vector<SDL_Point>& vec, const Surface& s, const SDL_Point& lup)
-{
-	int w, h;
-	std::tie(w, h) = s.getSize();
-	fillPolygonSurface(vec, s, w - lup.x, lup.y);
-}
-
 SDL_Color Renderer::getColor() const
 {
 	SDL_Color c;
@@ -333,6 +333,13 @@ SDL_Color Renderer::getColor() const
 void Renderer::setColor(const SDL_Color& c)
 {
 	SDL_SetRenderDrawColor(_sp.get(), c.r, c.g, c.b, c.a);
+}
+
+SDL_Color Renderer::pushColor()
+{
+	auto old = getColor();
+	_storedColors.push(old);
+	return old;
 }
 
 SDL_Color Renderer::pushColor(const SDL_Color& c)
@@ -346,9 +353,9 @@ SDL_Color Renderer::pushColor(const SDL_Color& c)
 SDL_Color Renderer::popColor(int n)
 {
 	for (int i = 1; i < n; i++) _storedColors.pop();
-	auto c = _storedColors.top();
-	_storedColors.pop();
+	auto& c = _storedColors.top();
 	setColor(c);
+	_storedColors.pop();
 	return c;
 }
 
